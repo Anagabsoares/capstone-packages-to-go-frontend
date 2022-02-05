@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
@@ -18,6 +19,11 @@ const TextHeader = styled.h1`
 const FormText = styled(Form.Text)`
   color: red;
   weight: bold;
+`;
+
+const Btn = styled(Button)`
+  margin-left: 0px;
+  margin-bottom: 10%;
 `;
 
 const CreateResident = () => {
@@ -114,10 +120,19 @@ const CreateResident = () => {
     }, 3000);
 
     setErrorMessage({ error: "" });
-    console.log("User successfully submitted");
   };
+
+  const navigate = useNavigate();
+  const routeChange = () => {
+    let path = "/overview/user-list";
+    navigate(path);
+  };
+
   return (
     <FormContainer className="add-user-form" onSubmit={onSubmit}>
+      <Btn variant="link" onClick={routeChange}>
+        Back to Users
+      </Btn>
       <TextHeader> Add User </TextHeader>
       <Form.Group className="mb-3">
         <Form.Label>Name</Form.Label>

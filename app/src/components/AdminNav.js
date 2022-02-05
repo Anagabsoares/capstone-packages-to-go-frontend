@@ -48,7 +48,7 @@ const AdminNav = () => {
   } else {
     return (
       <>
-        <Navbar.Brand href="/">Packages To Go </Navbar.Brand>
+        <Navbar.Brand href="#">Packages To Go </Navbar.Brand>
       </>
     );
   }

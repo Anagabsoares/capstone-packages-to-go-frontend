@@ -1,9 +1,23 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import CreateResident from "./CreateResident";
-import Users from "./Users";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Users from "./Users";
+
+const Header = styled.h1`
+  margin-top: 10%;
+  margin-bottom: 3%;
+  margin-left: 22%;
+`;
+
+const Btn = styled(Button)`
+  margin-right: 12%;
+  margin-left: auto;
+  margin-bottom: 3%;
+  display: block;
+`;
 
 const UserList = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -27,11 +41,59 @@ const UserList = () => {
     getUsers();
   }, []);
 
+  const deleteUser = async (id) => {
+    try {
+      console.log("clicked");
+      const token = await getAccessTokenSilently();
+      const response = await axios.delete(`${serverUrl}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("user deleted");
+      const newResidents = residents.filter((resid) => resid.user_id !== id);
+      setResidents(newResidents);
+    } catch (error) {
+      console.log(error);
+      alert("sorry!! this user could not be deleted");
+    }
+  };
+
+  const updateUser = async (id) => {
+    try {
+      console.log("clicked");
+      const token = await getAccessTokenSilently();
+      const response = await axios.patch(`${serverUrl}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("user updated");
+      const newResidents = residents.filter((resid) => resid.user_id !== id);
+      setResidents(newResidents);
+    } catch (error) {
+      console.log(error);
+      alert("sorry!! this user could not be deleted");
+    }
+  };
+
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = "/overview/add-users";
+    navigate(path);
+  };
+
   return (
     <Container>
-      <h1>Users</h1>
-
-      <Users residents={residents} />
+      <Header>Users</Header>
+      <Btn variant="primary" onClick={routeChange}>
+        Create User
+      </Btn>
+      <Users
+        residents={residents}
+        deleteUser={deleteUser}
+        updateUser={updateUser}
+      />
     </Container>
   );
 };

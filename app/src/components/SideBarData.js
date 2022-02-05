@@ -14,12 +14,7 @@ const SideBarData = [
     subNav: [
       {
         title: "Users",
-        path: "/overview/users",
-        icon: <IoIcons.IoIosPaper />,
-      },
-      {
-        title: "Add Users",
-        path: "/overview/add-users",
+        path: "/overview/user-list",
         icon: <IoIcons.IoIosPaper />,
       },
       {

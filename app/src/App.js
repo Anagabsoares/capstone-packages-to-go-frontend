@@ -20,7 +20,7 @@ const App = () => {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" exact element={<UserList />} />
+        <Route path="/overview/user-list" exact element={<UserList />} />
         <Route path="/profile" exact element={<Profile />} />
         <Route path="/my-packages" element={<Profile />} />
         <Route path="/overview/add-users" element={<CreateResident />} />
