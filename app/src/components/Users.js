@@ -69,7 +69,7 @@ const User = ({ residents, deleteUser, updateUser }) => {
 
     renderer: (row) => (
       <>
-        <ActionButton onClick={() => console.log(resident)}>
+        <ActionButton onClick={() => updateUser(row.user_id, resident)}>
           Update
         </ActionButton>
         <ActionButton
@@ -85,9 +85,6 @@ const User = ({ residents, deleteUser, updateUser }) => {
     ),
   };
 
-  // const onTableChange = (type, newState) => {
-  //   console.log("changed");
-  // };
   return (
     <Table>
       <BootstrapTable
@@ -112,7 +109,6 @@ const User = ({ residents, deleteUser, updateUser }) => {
               phone_number: row.phone_number,
               email: row.email,
             });
-            console.log(row);
           },
         })}
         filterPosition="bottom"

@@ -59,21 +59,31 @@ const UserList = () => {
     }
   };
 
-  const updateUser = async (id) => {
+  const updateUser = async (id, resident) => {
     try {
       console.log("clicked");
       const token = await getAccessTokenSilently();
-      const response = await axios.patch(`${serverUrl}/users/${id}`, {
+      console.log(token);
+      const headers = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      };
+      const response = await axios.patch(
+        `${serverUrl}/users/${id}`,
+        {
+          name: resident.name,
+          email: resident.email,
+          unit: resident.unit,
+          phone_number: resident.phone_number,
+        },
+        headers
+      );
+      console.log(response);
       alert("user updated");
-      const newResidents = residents.filter((resid) => resid.user_id !== id);
-      setResidents(newResidents);
     } catch (error) {
       console.log(error);
-      alert("sorry!! this user could not be deleted");
+      alert("sorry!! this user could not be updated");
     }
   };
 

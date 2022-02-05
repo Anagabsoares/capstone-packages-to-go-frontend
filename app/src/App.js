@@ -2,11 +2,11 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Route, Routes } from "react-router-dom";
 
-import NavBar from "./components/NavBar";
+import NavBar from "./navBarComponents/NavBar";
 import Profile from "./pages/Profile";
 import Loading from "./components/Loading";
 import UserList from "./components/UserList";
-import CreateResident from "./components/CreateResident";
+import CreateResident from "./components/CreateUser";
 
 import "./App.css";
 
