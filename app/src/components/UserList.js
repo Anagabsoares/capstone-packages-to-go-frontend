@@ -39,7 +39,7 @@ const UserList = () => {
       }
     };
     getUsers();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   const deleteUser = async (id) => {
     try {
@@ -63,7 +63,6 @@ const UserList = () => {
     try {
       console.log("clicked");
       const token = await getAccessTokenSilently();
-      console.log(token);
       const headers = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,7 +78,6 @@ const UserList = () => {
         },
         headers
       );
-      console.log(response);
       alert("user updated");
     } catch (error) {
       console.log(error);
@@ -87,7 +85,7 @@ const UserList = () => {
     }
   };
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const routeChange = () => {
     let path = "/overview/add-users";
     navigate(path);

@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Loading from "./components/Loading";
 import UserList from "./components/UserList";
 import CreateResident from "./components/CreateUser";
+import Packages from "./components/Packages";
 
 import "./App.css";
 
@@ -20,6 +21,7 @@ const App = () => {
     <>
       <NavBar />
       <Routes>
+        <Route path="/" exact element={<Packages />} />
         <Route path="/overview/user-list" exact element={<UserList />} />
         <Route path="/profile" exact element={<Profile />} />
         <Route path="/my-packages" element={<Profile />} />
