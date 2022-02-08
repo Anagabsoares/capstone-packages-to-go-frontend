@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import Users from "./Users";
 const Header = styled.h1`
   margin-top: 10%;
   margin-bottom: 3%;
-  margin-left: 22%;
+  margin-left: 12%;
 `;
 
 const Btn = styled(Button)`
@@ -18,11 +18,14 @@ const Btn = styled(Button)`
   margin-bottom: 3%;
   display: block;
 `;
+const Info = styled.p`
+  margin-left: 145px;
+`;
 
 const UserList = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [residents, setResidents] = useState([]);
-  const serverUrl = "https://api-packages-delivery.herokuapp.com";
+  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
 
   useEffect(() => {
     const getUsers = async () => {
@@ -97,6 +100,17 @@ const UserList = () => {
       <Btn variant="primary" onClick={routeChange}>
         Create User
       </Btn>
+      <OverlayTrigger
+        overlay={
+          <Tooltip id="tooltip-disabled">
+            double click to edit user info
+          </Tooltip>
+        }
+      >
+        <span className="d-inline-block">
+          <Info style={{ pointerEvents: "none" }}>ℹ️</Info>
+        </span>
+      </OverlayTrigger>
       <Users
         residents={residents}
         deleteUser={deleteUser}

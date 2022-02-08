@@ -4,18 +4,12 @@ import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
-// Update package
-// filter/sort packages by - delivery date/arrival date/ user id/
-// filter by delivered
-// filter
 // get all delivery requests
-// mark a package as delivered
-//
 
 const PackageForm = styled(Form)`
-  width: 30%;
-  margin-top: 7%;
-  margin-left: 30%;
+  margin-top: 0%;
+  margin-left: 25%;
+  width: 60%;
 `;
 
 const SubmitButton = styled(Button)`
@@ -25,7 +19,7 @@ const Header = styled.h1`
   font-size: 50px;
 `;
 
-const CreatePackage = () => {
+const CreatePackage = ({ packages, setPackages }) => {
   const { getAccessTokenSilently } = useAuth0();
   const [residents, setResidents] = useState([]);
   const [newPackage, setNewPackage] = useState({
@@ -33,14 +27,8 @@ const CreatePackage = () => {
     service_provider: "",
     description: "",
   });
-  const [specResident, setSpecResident] = useState({
-    name: "",
-    email: "",
-    unit: "",
-    phone_number: "",
-  });
-  const serverUrl = "https://api-packages-delivery.herokuapp.com";
 
+  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -63,7 +51,7 @@ const CreatePackage = () => {
   const addPackage = async ({ user_id, service_provider, description }) => {
     try {
       const token = await getAccessTokenSilently();
-      await axios.post(
+      const res = await axios.post(
         `${serverUrl}/users/${user_id}/packages`,
         {
           user_id: user_id,
@@ -74,6 +62,8 @@ const CreatePackage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log(res);
+      setPackages([...packages, res.data]);
     } catch (err) {
       console.log(err.response.data);
     }
@@ -82,7 +72,7 @@ const CreatePackage = () => {
   const onNameChange = (event) => {
     console.log(event.target.value);
     const user = residents.filter((resi) => resi.unit === event.target.value);
-
+    console.log(user);
     setNewPackage({
       ...newPackage,
       user_id: user[0]["user_id"],
@@ -126,6 +116,7 @@ const CreatePackage = () => {
       return;
     }
     addPackage(newPackage);
+    console.log(newPackage);
     setNewPackage({
       ...newPackage,
       user_id: "",

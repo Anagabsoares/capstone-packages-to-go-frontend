@@ -36,7 +36,7 @@ const CreateResident = () => {
     phone_number: "",
   });
   const [errors, setErrorMessage] = useState({});
-  const serverUrl = "https://api-packages-delivery.herokuapp.com";
+  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
 
   const addResident = async ({ name, phone_number, email, unit }) => {
     try {

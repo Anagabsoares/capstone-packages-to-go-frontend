@@ -1,116 +1,72 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import { Type } from "react-bootstrap-table2-editor";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import styled from "styled-components";
 
-import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useAuth0 } from "@auth0/auth0-react";
+import {
+  Button,
+  Container,
+  OverlayTrigger,
+  Tooltip,
+  Badge,
+  Alert,
+} from "react-bootstrap";
 
 const Info = styled.p`
   font-size: 25px;
   margin-bottom: 0%;
 `;
 
-const CreatePackage = () => {
-  const { user, getAccessTokenSilently } = useAuth0();
+const Btn = styled(Button)`
+  display: inline-block;
+  margin-right: 2%;
+  margin-left: 2%;
+  size: 10px;
+`;
+
+const H1 = styled.h1`
+  font-size: 60px;
+  margin-top: 0%;
+`;
+
+const MainContainer = styled(Container)`
+  margin-top: 0%;
+  margin-left: 25%;
+  width: 60%;
+`;
+const PackageList = ({
+  packages,
+  specResident,
+  getSpecResident,
+  setErrorMessage,
+  errorMessage,
+  markAsDelivered,
+}) => {
   const [clicked, setClick] = useState(false);
-  const [packages, setPackages] = useState([]);
-  const [specResident, setSpecResident] = useState({
-    name: "",
-    email: "",
-    unit: "",
-    phone_number: "",
-  });
   const headerSortingStyle = { backgroundColor: "lightgray" };
-  const serverUrl = "https://api-packages-delivery.herokuapp.com";
 
-  // GET all PACKAGES
-  useEffect(() => {
-    const geAllPackages = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        const response = await axios.get(`${serverUrl}/packages`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPackages(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    geAllPackages();
-  }, [getAccessTokenSilently]);
-
-  // get package by id
-  const getSpecResident = async (id) => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await axios.get(`${serverUrl}/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSpecResident(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // mark package as delivered
-  const markAsDelivered = async (id) => {
-    console.log(user);
-    try {
-      const token = await getAccessTokenSilently();
-      const res = await axios.patch(
-        `${serverUrl}/packages/${id}/mark-as-delivered`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (res.data === "This package has already been delivered") {
-        alert("This package has already been delivered");
-      } else {
-        alert("Success");
-      }
-
-      console.log(res);
-      // setPackages(res.data);
-      alert("user updated");
-    } catch (error) {
-      console.log(error);
-      alert("sorry!! this package could not be updated");
-    }
-  };
-
-  // delete a pckage
-  const deletePackage = async (id) => {
-    try {
-      console.log("clicked");
-      const token = await getAccessTokenSilently();
-      const response = await axios.delete(`${serverUrl}/packages/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert("user deleted");
-      const newPackages = packages.filter((resid) => resid.user_id !== id);
-      setPackages(newPackages);
-    } catch (error) {
-      console.log(error);
-      alert("sorry!! this user could not be deleted");
-    }
+  const showErrorMessage = () => {
+    return (
+      <Alert
+        variant="danger"
+        onClose={() => setErrorMessage(false)}
+        dismissible
+      >
+        <Alert.Heading>This package has already been delivered</Alert.Heading>
+      </Alert>
+    );
   };
 
   // format date - for table
   const formatDate = (cell) => {
     if (cell === "pending") {
-      return "pending";
+      return (
+        <Badge bg="primary" text="light">
+          pending
+        </Badge>
+      );
     }
     let dateObj = cell;
     if (typeof cell !== "object") {
@@ -122,9 +78,25 @@ const CreatePackage = () => {
     ).slice(-2)}/${dateObj.getUTCFullYear()}`;
   };
 
+  const formatRequestCell = (cell) => {
+    if (!cell) {
+      return (
+        <Badge bg="light" text="dark">
+          false
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge bg="warning" text="dark">
+          requested
+        </Badge>
+      );
+    }
+  };
+
   // sort column
   const orderDate = (order, column) => {
-    if (!order) return <span>&nbsp;&nbsp;Desc/Asc</span>;
+    if (!order) return <span>&nbsp;&nbsp;Old/New</span>;
     else if (order === "asc")
       return (
         <span>
@@ -139,7 +111,15 @@ const CreatePackage = () => {
       );
     return null;
   };
-  // stracture for table
+
+  function priceFormatter(column, colIndex) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {column.text}
+      </div>
+    );
+  }
+
   const columns = [
     {
       dataField: "packages_id",
@@ -158,6 +138,13 @@ const CreatePackage = () => {
       headerSortingStyle,
     },
     {
+      dataField: "status",
+      text: "Requested",
+      headerFormatter: priceFormatter,
+      formatter: formatRequestCell,
+      filter: textFilter(),
+    },
+    {
       dataField: "delivery_date",
       sort: true,
       text: "delivery  date",
@@ -166,17 +153,17 @@ const CreatePackage = () => {
       editor: {
         type: Type.DATE,
       },
-      filter: textFilter({}),
+      filter: textFilter(),
     },
     {
       dataField: "service_provider",
       text: "Provider",
-      filter: textFilter({}),
+      filter: textFilter(),
     },
     {
       dataField: "user_id",
       text: "user-id",
-      filter: textFilter({}),
+      filter: textFilter(),
     },
   ];
 
@@ -196,11 +183,11 @@ const CreatePackage = () => {
   // handle table events
 
   const handleOnExpand = (row, isExpand, rowId, e) => {
+    getSpecResident(row.user_id);
     if (isExpand === false) {
       isExpand = true;
     } else {
       isExpand = false;
-      setSpecResident("");
     }
     setClick(false);
   };
@@ -210,33 +197,36 @@ const CreatePackage = () => {
 
     renderer: (row) => (
       <>
-        <Button onClick={() => handleDetailButton(row.user_id)}>
-          {clicked && !specResident ? "Hide details" : "See Details"}
-        </Button>
+        <Btn onClick={() => handleDetailButton(row.user_id)}>
+          {clicked && !specResident ? "Hide details" : "See user's Details"}
+        </Btn>
 
         {clicked ? (
           <>
             <p>Name:{specResident.name}</p>
             <p>Unit: {specResident.unit}</p>
-            <p>Requested Delivery: {!specResident.status ? "False" : "True"}</p>
+            <p>Email: {specResident.email}</p>
+            <p>Phone: {specResident.phone_number}</p>
           </>
         ) : (
-          console.log(specResident)
+          <></>
         )}
-        <Button
+        <Btn
+          variant="success"
           onClick={() => {
             markAsDelivered(row.packages_id);
           }}
         >
-          ✅ Delivered
-        </Button>
+          ✅ mark as delivered
+        </Btn>
       </>
     ),
     onExpand: handleOnExpand,
   };
 
   return (
-    <Container>
+    <MainContainer>
+      <H1>Packages 📦</H1>
       <OverlayTrigger
         overlay={
           <Tooltip id="tooltip-disabled">
@@ -248,6 +238,7 @@ const CreatePackage = () => {
           <Info style={{ pointerEvents: "none" }}>ℹ️</Info>
         </span>
       </OverlayTrigger>
+      {errorMessage ? showErrorMessage() : <></>}
 
       <BootstrapTable
         striped
@@ -263,8 +254,8 @@ const CreatePackage = () => {
         pagination={paginationFactory()}
         filterPosition="bottom"
       />
-    </Container>
+    </MainContainer>
   );
 };
 
-export default CreatePackage;
+export default PackageList;
