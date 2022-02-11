@@ -39,16 +39,16 @@ const Dashboard = () => {
     const value = event.target.value;
     let path;
     if (value === "redirect-new-user") {
-      path = "/overview/add-users";
+      path = "/users/add-users";
       navigate(path);
     } else if (value === "redirect-see-users") {
-      path = "/overview/user-list";
+      path = "/users";
       navigate(path);
     } else if (value === "redirect-see-packages") {
       path = "/packages";
       navigate(path);
     } else if (value === "redirect-see-request") {
-      path = "/user-requests";
+      path = "/packages/requests";
       navigate(path);
     }
   };

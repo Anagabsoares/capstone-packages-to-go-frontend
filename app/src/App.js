@@ -12,6 +12,7 @@ import ResidentPackages from "./userComponents/ResidentPackages";
 import DashBoard from "./adminComponents/DashBoard";
 import UserRequest from "./adminComponents/UserRequest";
 import NotFoundPage from "./pages/NotFound";
+import { io } from "socket.io-client";
 
 import "./App.css";
 
@@ -19,9 +20,11 @@ const App = () => {
   const { isLoading, getAccessTokenSilently } = useAuth0();
   const { user, isAuthenticated } = useAuth0();
   const [role, setRole] = useState("");
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     const check_role = async () => {
+      const token = await getAccessTokenSilently;
       if (isAuthenticated) {
         try {
           let value = await user["https://netlify-integration.com/roles"];
@@ -32,7 +35,50 @@ const App = () => {
       }
     };
     check_role();
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, getAccessTokenSilently]);
+
+  useEffect(() => {
+    const getTokenConnect = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const socket = io("http://localhost:9000", {
+          transportOptions: {
+            polling: {
+              extraHeaders: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          },
+        });
+
+        console.log(socket);
+
+        socket.on("connect", () => {
+          console.log("connected!");
+          socket.emit("room", "room1");
+        });
+
+        socket.on("message", (data) => {
+          console.log(data);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getTokenConnect();
+  }, []);
+
+  // Handling token expiration
+  // socket.on("connect_error", (error) => {
+  //   if (error.data.type === "UnauthorizedError") {
+  //     console.log("User token has expired");
+  //   }
+  // });
+
+  // Listening to events
+  // socket.on("messages", (data) => {
+  //   console.log(data);
+  // });
 
   const protectedRoute = () => {
     if (isAuthenticated && role[0] === "admin") {

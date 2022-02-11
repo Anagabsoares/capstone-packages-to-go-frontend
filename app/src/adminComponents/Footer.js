@@ -18,7 +18,6 @@ const Foot = styled.footer`
 const Footer = (props) => {
   return (
     <Foot>
-      <hr></hr>
       <div className="copyright">
         &copy; {1900 + new Date().getYear()},
         <i className="fa fa-heart heart" /> by Ana Gabriele Soares
