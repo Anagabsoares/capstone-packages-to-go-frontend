@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PackageList from "./PackageTable";
-import CreatePackage from "./CreatePackage";
-import UserPackages from "./UserPackages";
-import { Button } from "react-bootstrap";
+import SearchUser from "./SearchUser";
+import { Button, Container } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
@@ -11,14 +10,21 @@ const ButtonCreate = styled(Button)`
   margin-left: 80%;
   margin-top: 5%;
   display: inline-block;
+  background-color: #3a0ca3;
+  color: white;
+  border-color: #3a0ca3;
+`;
+
+const Cont = styled(Container)`
+  margin-bottom: 3%;
 `;
 
 const Packages = () => {
   const [toggle, setToggle] = useState(false);
-  const [toggleSpec, setToggleSpec] = useState(true);
   const [packages, setPackages] = useState([]);
+  const [residents, setResidents] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [specResident, setSpecResident] = useState({
     name: "",
     email: "",
@@ -28,24 +34,38 @@ const Packages = () => {
   const serverUrl = "https://packages-delivery-ai.herokuapp.com";
 
   useEffect(() => {
-    const geAllPackages = async () => {
+    const getUsers = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get(`${serverUrl}/packages`, {
+        const response = await axios.get(`${serverUrl}/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setPackages(response.data);
+        setResidents(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-    geAllPackages();
-  }, [getAccessTokenSilently]);
+    getUsers();
+  }, []);
 
-  const handleClick = () => {
-    setToggle(!toggle);
+  useEffect(() => {
+    getAllPackages();
+  }, []);
+
+  const getAllPackages = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await axios.get(`${serverUrl}/packages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPackages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // delete a pckage
@@ -99,9 +119,8 @@ const Packages = () => {
           setErrorMessage(false);
         }, 3000);
       } else {
-        // COME BACK- hOW TO UPDATE THE STATE - PATCH REQUEST
-        window.location.reload();
         alert("Success!!");
+        getAllPackages();
       }
     } catch (error) {
       console.log(error);
@@ -109,8 +128,8 @@ const Packages = () => {
     }
   };
 
-  const handleSpecificButton = () => {
-    setToggleSpec(!toggleSpec);
+  const handleClick = () => {
+    setToggle(!toggle);
   };
 
   return (
@@ -120,28 +139,15 @@ const Packages = () => {
           handleClick();
         }}
       >
-        {!toggle ? "Add new Package" : "hide form"}
+        {!toggle ? "Search User" : "X"}
       </ButtonCreate>
       {toggle ? (
-        <CreatePackage packages={packages} setPackages={setPackages} />
-      ) : (
-        <></>
-      )}
-
-      <ButtonCreate
-        onClick={() => {
-          handleSpecificButton();
-        }}
-      >
-        check specific users
-      </ButtonCreate>
-
-      {toggleSpec ? (
-        <UserPackages
+        <SearchUser
+          packages={packages}
+          residents={residents}
           markAsDelivered={markAsDelivered}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
-          packages={packages}
         />
       ) : (
         <></>

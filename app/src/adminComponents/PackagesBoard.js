@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
 import {
   Container,
   ListGroup,
@@ -9,7 +10,19 @@ import {
   Card,
 } from "react-bootstrap";
 
-const PackageBoard = ({ pack, markAsDelivered, packages }) => {
+const Btn = styled(Button)`
+  background-color: #005f73;
+  border-color: #005f73;
+`;
+
+const PackageBoard = ({ pack, markAsDelivered, packages, getPackbyUser }) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = (id, user_id) => {
+    markAsDelivered(id);
+    getPackbyUser(user_id);
+    setIsClicked(false);
+  };
   return (
     <Container>
       <Row>
@@ -42,23 +55,24 @@ const PackageBoard = ({ pack, markAsDelivered, packages }) => {
                     description: {pack.description}
                   </ListGroup.Item>
                 </ListGroup>
-
-                {pack.delivery_date === "pending" ? (
-                  <Button
-                    size="sm"
-                    className="mt-auto font-weight-bold"
-                    variant="success"
-                    block
-                    onClick={() => {
-                      markAsDelivered(pack.packages_id);
-                    }}
-                  >
-                    mark as delivered
-                  </Button>
-                ) : (
-                  <></>
-                )}
               </Card.Body>
+              {pack.delivery_date === "pending" && !isClicked ? (
+                <Btn
+                  size="sm"
+                  className="mt-auto font-weight-bold"
+                  variant="success"
+                  block
+                  onClick={() => {
+                    handleClick(pack.packages_id, pack.user_id);
+                  }}
+                >
+                  mark as delivered
+                </Btn>
+              ) : (
+                <Badge bg="primary" disabled>
+                  delivered
+                </Badge>
+              )}
             </Card>
           </Col>
         ))}

@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const FormContainer = styled(Form)`
   width: 30%;
-  padding-top: 10%;
+  padding-top: 5%;
   justify-content: center;
   margin-left: 30%;
 `;
@@ -24,6 +24,13 @@ const FormText = styled(Form.Text)`
 const Btn = styled(Button)`
   margin-left: 0px;
   margin-bottom: 10%;
+  color: #3a0ca3;
+`;
+
+const ButtonSubmit = styled(Button)`
+  background-color: #3a0ca3;
+  color: white;
+  border-color: #3a0ca3;
 `;
 
 const CreateResident = () => {
@@ -177,9 +184,9 @@ const CreateResident = () => {
         )}
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <ButtonSubmit variant="primary" type="submit">
         Add User
-      </Button>
+      </ButtonSubmit>
     </FormContainer>
   );
 };

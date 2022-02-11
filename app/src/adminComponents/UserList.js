@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import * as AiIcons from "react-icons/ai";
 import styled from "styled-components";
 import Users from "./Users";
 
@@ -17,6 +18,9 @@ const Btn = styled(Button)`
   margin-left: auto;
   margin-bottom: 3%;
   display: block;
+  background-color: #3a0ca3;
+  color: white;
+  border-color: #3a0ca3;
 `;
 const Info = styled.p`
   margin-left: 145px;
@@ -108,7 +112,9 @@ const UserList = () => {
         }
       >
         <span className="d-inline-block">
-          <Info style={{ pointerEvents: "none" }}>ℹ️</Info>
+          <Info style={{ pointerEvents: "none" }}>
+            <AiIcons.AiOutlineInfoCircle size={30} />
+          </Info>
         </span>
       </OverlayTrigger>
       <Users

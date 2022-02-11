@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import SideBarData from "./SideBarData";
+import { Container } from "react-bootstrap";
 import SubMenu from "./SubMenu";
-import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
 
 const Menu = styled.div`
   color: white;
@@ -39,32 +37,43 @@ const SideBarNav = styled.nav`
   top: 0;
   left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
   transition: 350ms;
-  z-index: 10;
+  z-index: 0;
 `;
 
 const SideBarWrap = styled.div`
   width: 100%;
 `;
 
-const SideBar = () => {
-  const [sidebar, setSidebar] = useState(false);
-  const showSideBar = () => setSidebar(!sidebar);
+const Cont = styled(Container)`
+  margin-top: 2%;
+`;
+
+const SideBar = ({ SideBarData }) => {
+  const [sidebar, setSidebar] = useState(true);
+  const showSideBar = () => setSidebar(true);
 
   return (
     <>
-      <Menu>
-        <MenuIcon to="#">
-          <FaIcons.FaBars onClick={showSideBar} />
-        </MenuIcon>
-      </Menu>
+      <Menu></Menu>
       <SideBarNav sidebar={sidebar}>
         <SideBarWrap>
-          <MenuIcon to="#">
-            <AiIcons.AiOutlineClose onClick={showSideBar} />
-          </MenuIcon>
+          <MenuIcon to="#"></MenuIcon>
           {SideBarData.map((item, index) => {
-            return <SubMenu item={item} key={index}></SubMenu>;
+            if (item.title !== "Support") {
+              return <SubMenu item={item} key={index}></SubMenu>;
+            } else {
+              return <></>;
+            }
           })}
+          <Cont>
+            {SideBarData.map((item, index) => {
+              if (item.title === "Support") {
+                return <SubMenu item={item} key={index}></SubMenu>;
+              } else {
+                return <></>;
+              }
+            })}
+          </Cont>
         </SideBarWrap>
       </SideBarNav>
     </>

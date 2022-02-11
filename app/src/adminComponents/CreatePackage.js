@@ -8,19 +8,20 @@ import styled from "styled-components";
 
 const PackageForm = styled(Form)`
   margin-top: 0%;
-  margin-left: 25%;
-  width: 60%;
+  margin-left: 10%;
+  width: 80%;
 `;
 
 const SubmitButton = styled(Button)`
   margin-top: 2%;
-`;
-const Header = styled.h1`
-  font-size: 50px;
+  background-color: #3a0ca3;
+  color: white;
+  border-color: #3a0ca3;
 `;
 
-const CreatePackage = ({ packages, setPackages }) => {
+const CreatePackage = ({}) => {
   const { getAccessTokenSilently } = useAuth0();
+  const [packages, setPackages] = useState();
   const [residents, setResidents] = useState([]);
   const [newPackage, setNewPackage] = useState({
     user_id: "",
@@ -46,6 +47,20 @@ const CreatePackage = ({ packages, setPackages }) => {
     getUsers();
   }, [getAccessTokenSilently]);
 
+  const getAllPackages = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await axios.get(`${serverUrl}/packages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPackages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const [message, setMessage] = useState({ error: "", success: false });
 
   const addPackage = async ({ user_id, service_provider, description }) => {
@@ -62,7 +77,6 @@ const CreatePackage = ({ packages, setPackages }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res);
       setPackages([...packages, res.data]);
     } catch (err) {
       console.log(err.response.data);
@@ -70,13 +84,16 @@ const CreatePackage = ({ packages, setPackages }) => {
   };
 
   const onNameChange = (event) => {
-    console.log(event.target.value);
     const user = residents.filter((resi) => resi.unit === event.target.value);
-    console.log(user);
-    setNewPackage({
-      ...newPackage,
-      user_id: user[0]["user_id"],
-    });
+    const result = user[0];
+    if (result === undefined) {
+      return;
+    } else {
+      setNewPackage({
+        ...newPackage,
+        user_id: user[0]["user_id"],
+      });
+    }
   };
 
   const onProviderChange = (event) => {
@@ -84,7 +101,6 @@ const CreatePackage = ({ packages, setPackages }) => {
       ...newPackage,
       service_provider: event.target.value,
     });
-    console.log(event.target.value);
   };
 
   const onDescriptionChange = (event) => {
@@ -92,7 +108,6 @@ const CreatePackage = ({ packages, setPackages }) => {
       ...newPackage,
       description: event.target.value,
     });
-    console.log(event.target.value);
   };
 
   const validadeInput = () => {
@@ -116,7 +131,6 @@ const CreatePackage = ({ packages, setPackages }) => {
       return;
     }
     addPackage(newPackage);
-    console.log(newPackage);
     setNewPackage({
       ...newPackage,
       user_id: "",
@@ -138,7 +152,6 @@ const CreatePackage = ({ packages, setPackages }) => {
   return (
     <>
       <PackageForm className="mb-3" onSubmit={onSubmit}>
-        <Header>Add Package</Header>
         <label htmlFor="exampleDataList" className="form-label">
           Resident's Name or unit
         </label>

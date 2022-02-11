@@ -1,19 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Route, Routes } from "react-router-dom";
-
+import Initial from "./pages/Initial";
 import NavBar from "./navBarComponents/NavBar";
 import Profile from "./pages/Profile";
-import Loading from "./components/Loading";
-import UserList from "./components/UserList";
-import CreateResident from "./components/CreateUser";
-import UserPackages from "./components/UserPackages";
-import Packages from "./components/Packages";
+import Loading from "./adminComponents/Loading";
+import UserList from "./adminComponents/UserList";
+import CreateResident from "./adminComponents/CreateUser";
+import Packages from "./adminComponents/Packages";
+import ResidentPackages from "./userComponents/ResidentPackages";
+import DashBoard from "./adminComponents/DashBoard";
+import UserRequest from "./adminComponents/UserRequest";
+import NotFoundPage from "./pages/NotFound";
 
 import "./App.css";
 
 const App = () => {
-  const { isLoading } = useAuth0();
+  const { isLoading, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const check_role = async () => {
+      if (isAuthenticated) {
+        try {
+          let value = await user["https://netlify-integration.com/roles"];
+          setRole(value);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+    check_role();
+  }, [user, isAuthenticated]);
+
+  const protectedRoute = () => {
+    if (isAuthenticated && role[0] === "admin") {
+      return <Route path="/" exact element={<DashBoard />} />;
+    } else if (isAuthenticated && role[0] === "admin") {
+      return <Route path="/" exact element={<ResidentPackages />} />;
+    } else {
+      return <Route path="/" exact element={<Initial />} />;
+    }
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -21,16 +50,23 @@ const App = () => {
   return (
     <>
       <NavBar />
+
       <Routes>
-        <Route path="/" exact element={<Packages />} />
-        <Route path="/packages" exact element={<UserPackages />} />
-        <Route path="/overview/user-list" exact element={<UserList />} />
+        {protectedRoute()}
         <Route path="/profile" exact element={<Profile />} />
-        <Route path="/my-packages" element={<Profile />} />
-        <Route path="/overview/add-users" element={<CreateResident />} />
+        <Route path="/dash" element={<DashBoard />} />
+        <Route path="/users" exact element={<UserList />} />
+        <Route path="/users" exact element={<UserList />} />
+        <Route path="/users/add-users" element={<CreateResident />} />
+        <Route path="/packages/requests" exact element={<UserRequest />} />
+        <Route path="/packages" exact element={<Packages />} />
+        <Route path="/packages/history" exact element={<Packages />} />
+        <Route path="/my-packages" exact element={<ResidentPackages />} />
+        <Route path="/404" exact element={<NotFoundPage />} />
       </Routes>
+      {/* <Footer /> */}
     </>
   );
 };
 
-export default React.memo(App);
+export default App;

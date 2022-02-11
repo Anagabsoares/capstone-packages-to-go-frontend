@@ -3,6 +3,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import { Type } from "react-bootstrap-table2-editor";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import * as AiIcons from "react-icons/ai";
 import styled from "styled-components";
 
 import {
@@ -235,7 +236,9 @@ const PackageList = ({
         }
       >
         <span className="d-inline-block">
-          <Info style={{ pointerEvents: "none" }}>ℹ️</Info>
+          <Info style={{ pointerEvents: "none" }}>
+            <AiIcons.AiOutlineInfoCircle size={30} />
+          </Info>
         </span>
       </OverlayTrigger>
       {errorMessage ? showErrorMessage() : <></>}
