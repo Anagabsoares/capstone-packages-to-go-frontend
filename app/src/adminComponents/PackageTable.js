@@ -215,7 +215,7 @@ const PackageList = ({
         <Btn
           variant="success"
           onClick={() => {
-            markAsDelivered(row.packages_id);
+            markAsDelivered(row.packages_id, row.user_id);
           }}
         >
           ✅ mark as delivered

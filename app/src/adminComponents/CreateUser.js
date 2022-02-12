@@ -43,7 +43,8 @@ const CreateResident = () => {
     phone_number: "",
   });
   const [errors, setErrorMessage] = useState({});
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
 
   const addResident = async ({ name, phone_number, email, unit }) => {
     try {
@@ -131,7 +132,7 @@ const CreateResident = () => {
 
   const navigate = useNavigate();
   const routeChange = () => {
-    let path = "/overview/user-list";
+    let path = "/users";
     navigate(path);
   };
 

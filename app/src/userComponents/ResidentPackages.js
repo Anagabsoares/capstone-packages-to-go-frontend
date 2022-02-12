@@ -35,7 +35,8 @@ const ResidentPackages = () => {
     delivered: [],
   });
 
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
   useEffect(() => {
     const getUser = async () => {
       try {

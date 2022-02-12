@@ -20,8 +20,7 @@ const SubmitButton = styled(Button)`
   border-color: #3a0ca3;
 `;
 
-const CreatePackage = ({ currentUser, socket }) => {
-  console.log(currentUser, socket);
+const CreatePackage = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [packages, setPackages] = useState();
   const [residents, setResidents] = useState([]);
@@ -32,7 +31,9 @@ const CreatePackage = ({ currentUser, socket }) => {
     description: "",
   });
 
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -101,6 +102,26 @@ const CreatePackage = ({ currentUser, socket }) => {
     }
   };
 
+  const sendPostNotification = async (user_id) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const res = await axios.post(
+        `${serverUrl}/users/${user_id}/notifications`,
+        {
+          user_id: user_id,
+          entity_type: 1,
+          description: "A new package was added to the the system",
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onNameChange = (event) => {
     const user = residents.filter((resi) => resi.unit === event.target.value);
     const result = user[0];
@@ -150,6 +171,7 @@ const CreatePackage = ({ currentUser, socket }) => {
     }
 
     addPackage(newPackage);
+    sendPostNotification(newPackage.user_id);
 
     setNewPackage({
       ...newPackage,

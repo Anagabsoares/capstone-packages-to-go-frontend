@@ -52,7 +52,8 @@ const SearchUser = ({
   const [requested, setRequested] = useState("");
   const [toggleClick, setToggleClick] = useState("");
   const [packs, setPacks] = useState("");
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
 
   const getPackbyUser = async (user_id) => {
     try {

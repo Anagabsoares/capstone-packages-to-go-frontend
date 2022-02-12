@@ -19,7 +19,7 @@ const PackageBoard = ({ pack, markAsDelivered, packages, getPackbyUser }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = (id, user_id) => {
-    markAsDelivered(id);
+    markAsDelivered(id, user_id);
     getPackbyUser(user_id);
     setIsClicked(false);
   };

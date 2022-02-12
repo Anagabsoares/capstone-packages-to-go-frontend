@@ -31,7 +31,8 @@ const Packages = () => {
     unit: "",
     phone_number: "",
   });
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
 
   useEffect(() => {
     const getUsers = async () => {
@@ -101,7 +102,27 @@ const Packages = () => {
     }
   };
 
-  const markAsDelivered = async (id) => {
+  const sendDeliveryNotification = async (user_id, package_id) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const res = await axios.post(
+        `${serverUrl}/users/${user_id}/notifications`,
+        {
+          user_id: user_id,
+          entity_type: 2,
+          description: `Package ${package_id} was delivered`,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const markAsDelivered = async (id, user_id) => {
     try {
       const token = await getAccessTokenSilently();
       const res = await axios.patch(
@@ -120,6 +141,7 @@ const Packages = () => {
         }, 3000);
       } else {
         alert("Success!!");
+        sendDeliveryNotification(user_id, id);
         getAllPackages();
       }
     } catch (error) {

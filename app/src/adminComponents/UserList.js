@@ -29,7 +29,8 @@ const Info = styled.p`
 const UserList = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [residents, setResidents] = useState([]);
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
 
   useEffect(() => {
     const getUsers = async () => {
@@ -94,7 +95,7 @@ const UserList = () => {
 
   const navigate = useNavigate();
   const routeChange = () => {
-    let path = "/overview/add-users";
+    let path = "/users/add-users";
     navigate(path);
   };
 
