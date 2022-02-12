@@ -33,8 +33,9 @@ const NavBrand = styled(Navbar.Brand)`
 `;
 
 const AdminNav = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [role, setRole] = useState("");
+
   const [userLogged, setUserLogged] = useState("");
   const [counter, setCounter] = useState("");
 
@@ -53,7 +54,6 @@ const AdminNav = () => {
     check_role();
   }, [user, isAuthenticated]);
 
-  useEffect(() => {});
   if (isAuthenticated && role[0] === "admin") {
     return (
       <>

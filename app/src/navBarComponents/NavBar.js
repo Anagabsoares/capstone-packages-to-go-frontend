@@ -15,13 +15,14 @@ const NavBox = styled(Container)`
 
 const NavBarDark = styled(Navbar)``;
 
-const NavBar = () => {
+const NavBar = ({ socket, currentUser }) => {
+  console.log(currentUser);
   return (
-    <NavBarDark variant="light">
-      <NavBox>
-        <AdminNav />
+    <NavBarDark variant="light" socket={socket} currentUser={currentUser}>
+      <NavBox socket={socket} currentUser={currentUser}>
+        <AdminNav socket={socket} currentUser={currentUser} />
       </NavBox>
-      <AuthenticationButton />
+      <AuthenticationButton socket={socket} currentUser={currentUser} />
     </NavBarDark>
   );
 };

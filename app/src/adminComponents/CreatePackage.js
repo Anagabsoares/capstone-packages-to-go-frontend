@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
+import { io } from "socket.io-client";
 
 // get all delivery requests
 
@@ -19,10 +20,12 @@ const SubmitButton = styled(Button)`
   border-color: #3a0ca3;
 `;
 
-const CreatePackage = ({}) => {
+const CreatePackage = ({ currentUser, socket }) => {
+  console.log(currentUser, socket);
   const { getAccessTokenSilently } = useAuth0();
   const [packages, setPackages] = useState();
   const [residents, setResidents] = useState([]);
+  const [specificResident, setSpecResident] = useState("");
   const [newPackage, setNewPackage] = useState({
     user_id: "",
     service_provider: "",
@@ -60,6 +63,20 @@ const CreatePackage = ({}) => {
       console.log(error);
     }
   };
+  const getSpecResident = async (id) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await axios.get(`${serverUrl}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      setSpecResident(response.data.email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [message, setMessage] = useState({ error: "", success: false });
 
@@ -77,9 +94,10 @@ const CreatePackage = ({}) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setPackages([...packages, res.data]);
+      console.log(res.data);
+      setPackages([res.data]);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err);
     }
   };
 
@@ -122,7 +140,7 @@ const CreatePackage = ({}) => {
     }
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = (event, type) => {
     event.preventDefault();
 
     if (!validadeInput()) {
@@ -130,7 +148,9 @@ const CreatePackage = ({}) => {
       setTimeout(() => setMessage({ ...message, success: false }), 3000);
       return;
     }
+
     addPackage(newPackage);
+
     setNewPackage({
       ...newPackage,
       user_id: "",
@@ -151,7 +171,10 @@ const CreatePackage = ({}) => {
   ];
   return (
     <>
-      <PackageForm className="mb-3" onSubmit={onSubmit}>
+      <PackageForm
+        className="mb-3"
+        onSubmit={(e) => onSubmit(e, "added a new package")}
+      >
         <label htmlFor="exampleDataList" className="form-label">
           Resident's Name or unit
         </label>

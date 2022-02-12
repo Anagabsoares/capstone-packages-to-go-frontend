@@ -30,7 +30,8 @@ const Column = styled(Col)`
   margin-top: -7%;
 `;
 
-const Dashboard = () => {
+const Dashboard = ({ socket, currentUser }) => {
+  console.log(currentUser);
   const [buttonValue, setButtonValue] = useState();
 
   const navigate = useNavigate();
@@ -180,7 +181,10 @@ const Dashboard = () => {
                 </Card.Title>
               </Card.Header>
               <Card.Body>
-                <CreatePackage></CreatePackage>
+                <CreatePackage
+                  currentUser={currentUser}
+                  socket={socket}
+                ></CreatePackage>
               </Card.Body>
               <Card.Text></Card.Text>
             </DashCard>
