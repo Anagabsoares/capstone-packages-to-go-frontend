@@ -35,8 +35,7 @@ const ResidentPackages = () => {
     delivered: [],
   });
 
-  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -117,7 +116,7 @@ const ResidentPackages = () => {
   };
 
   const requestAll = (notRequested) => {
-    const pack = notRequested.forEach((item) => {
+    notRequested.forEach((item) => {
       updatePackStatus(item.packages_id);
     });
     setPackages({ ...packages, notRequested: [] });

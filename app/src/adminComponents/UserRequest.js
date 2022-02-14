@@ -18,8 +18,8 @@ const UserRequest = () => {
   const [residents, setResidents] = useState([]);
   const [frequency, setFrequency] = useState({});
   const [packages, setPackages] = useState([]);
-  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     const getAllPackages = async () => {
@@ -31,7 +31,7 @@ const UserRequest = () => {
           },
         });
         let res = [];
-        const pack = response.data.forEach((item) => {
+        response.data.forEach((item) => {
           if (item.delivery_date === "pending" && item.status) {
             res.push(item.user_id);
           }
@@ -77,7 +77,7 @@ const UserRequest = () => {
       getSpecResident(id);
     });
     userFrequency(packages);
-  }, [packages]);
+  }, []);
 
   const COLORS = ["primary", "success", "danger", "alert", "info"];
 

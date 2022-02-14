@@ -27,7 +27,7 @@ const Notifications = () => {
   const { user, getAccessTokenSilently } = useAuth0();
   const [notifications, setNotifications] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     if (user) {

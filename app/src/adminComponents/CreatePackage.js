@@ -29,8 +29,7 @@ const CreatePackage = () => {
     description: "",
   });
 
-  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     const getUsers = async () => {

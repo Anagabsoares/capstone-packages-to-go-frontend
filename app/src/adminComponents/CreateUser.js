@@ -43,8 +43,8 @@ const CreateResident = () => {
     phone_number: "",
   });
   const [errors, setErrorMessage] = useState({});
-  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const addResident = async ({ name, phone_number, email, unit }) => {
     try {

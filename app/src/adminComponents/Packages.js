@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PackageList from "./PackageTable";
 import SearchUser from "./SearchUser";
-import { Button, Container } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
@@ -27,8 +27,7 @@ const Packages = () => {
     unit: "",
     phone_number: "",
   });
-  // const serverUrl = "https://packages-delivery-ai.herokuapp.com";
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     const getUsers = async () => {

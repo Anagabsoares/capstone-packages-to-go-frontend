@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     const check_role = async () => {
-      const token = await getAccessTokenSilently;
+      // const token = await getAccessTokenSilently;
       if (isAuthenticated) {
         try {
           let value = await user["https://netlify-integration.com/roles"];

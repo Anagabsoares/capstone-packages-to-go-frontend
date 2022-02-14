@@ -20,7 +20,7 @@ const ChartContainer = styled(Container)`
 
 const Chart = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const serverUrl = "https://packages-delivery-ai.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [data, setData] = useState([
     { name: "packages", pending: "", delivered: "", requested: "" },
   ]);

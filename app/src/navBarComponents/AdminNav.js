@@ -38,7 +38,7 @@ const AdminNav = () => {
   const [role, setRole] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [counter, setCounter] = useState([]);
-  const serverUrl = "https://capstone-backend-api.herokuapp.com";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     const check_role = async () => {

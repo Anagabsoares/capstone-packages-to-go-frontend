@@ -9,10 +9,10 @@ import { Auth0Provider } from "@auth0/auth0-react";
 ReactDOM.render(
   <Router>
     <Auth0Provider
-      domain="capstone-package-to-go.us.auth0.com"
-      clientId="olHrVA9ljTarhF43w5PLtxHIq4NHnFSe"
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       redirectUri={window.location.origin}
-      audience="https://packages-to-go.com"
+      audience={process.env.REACT_APP_AUT_AUD}
     >
       <App />
     </Auth0Provider>
