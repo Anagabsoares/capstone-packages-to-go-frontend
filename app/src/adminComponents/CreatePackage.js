@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
-import { io } from "socket.io-client";
 
 // get all delivery requests
 
@@ -24,7 +23,6 @@ const CreatePackage = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [packages, setPackages] = useState();
   const [residents, setResidents] = useState([]);
-  const [specificResident, setSpecResident] = useState("");
   const [newPackage, setNewPackage] = useState({
     user_id: "",
     service_provider: "",
@@ -72,8 +70,6 @@ const CreatePackage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
-      setSpecResident(response.data.email);
     } catch (error) {
       console.log(error);
     }
@@ -95,7 +91,6 @@ const CreatePackage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res.data);
       setPackages([res.data]);
     } catch (err) {
       console.log(err);
@@ -110,13 +105,17 @@ const CreatePackage = () => {
         {
           user_id: user_id,
           entity_type: 1,
-          description: "A new package was added to the the system",
+          description: `${new Date().toLocaleDateString("en-us", {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}`,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res.data);
     } catch (err) {
       console.log(err);
     }

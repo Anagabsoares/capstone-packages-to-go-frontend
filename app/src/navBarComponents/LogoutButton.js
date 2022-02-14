@@ -5,7 +5,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
 const LogoutBtn = styled(Button)`
-  margin-right: 50px;
+  margin-bottom: 0;
+  margin-top: 5px;
+  width: 100%;
 `;
 
 const LogoutButton = () => {

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import LogoutButton from "./LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
 import SubMenu from "./SubMenu";
 
 const Menu = styled.div`
@@ -49,13 +51,12 @@ const Cont = styled(Container)`
 `;
 
 const SideBar = ({ SideBarData }) => {
-  const [sidebar, setSidebar] = useState(true);
-  const showSideBar = () => setSidebar(true);
+  const { isAuthenticated } = useAuth0();
 
   return (
     <>
       <Menu></Menu>
-      <SideBarNav sidebar={sidebar}>
+      <SideBarNav sidebar={true}>
         <SideBarWrap>
           <MenuIcon to="#"></MenuIcon>
           {SideBarData.map((item, index) => {
@@ -68,12 +69,13 @@ const SideBar = ({ SideBarData }) => {
           <Cont>
             {SideBarData.map((item, index) => {
               if (item.title === "Support") {
-                return <SubMenu item={item} key={index}></SubMenu>;
+                return <SubMenu item={item} key={index + 1}></SubMenu>;
               } else {
                 return <></>;
               }
             })}
           </Cont>
+          {isAuthenticated ? <LogoutButton /> : <></>}
         </SideBarWrap>
       </SideBarNav>
     </>

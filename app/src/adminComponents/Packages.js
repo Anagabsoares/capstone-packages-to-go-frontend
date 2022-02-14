@@ -15,10 +15,6 @@ const ButtonCreate = styled(Button)`
   border-color: #3a0ca3;
 `;
 
-const Cont = styled(Container)`
-  margin-bottom: 3%;
-`;
-
 const Packages = () => {
   const [toggle, setToggle] = useState(false);
   const [packages, setPackages] = useState([]);
@@ -110,7 +106,12 @@ const Packages = () => {
         {
           user_id: user_id,
           entity_type: 2,
-          description: `Package ${package_id} was delivered`,
+          description: `${new Date().toLocaleDateString("en-us", {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}`,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

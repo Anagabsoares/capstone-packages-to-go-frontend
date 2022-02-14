@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Initial from "./pages/Initial";
 import NavBar from "./navBarComponents/NavBar";
 import Profile from "./pages/Profile";
-import Loading from "./adminComponents/Loading";
+import Loading from "./components/Loading";
 import UserList from "./adminComponents/UserList";
 import CreateResident from "./adminComponents/CreateUser";
 import Packages from "./adminComponents/Packages";
@@ -12,7 +12,7 @@ import ResidentPackages from "./userComponents/ResidentPackages";
 import DashBoard from "./adminComponents/DashBoard";
 import UserRequest from "./adminComponents/UserRequest";
 import NotFoundPage from "./pages/NotFound";
-
+import Notifications from "./userComponents/Notifications";
 import "./App.css";
 
 const App = () => {
@@ -63,6 +63,7 @@ const App = () => {
         <Route path="/packages" exact element={<Packages />} />
         <Route path="/packages/history" exact element={<Packages />} />
         <Route path="/my-packages" exact element={<ResidentPackages />} />
+        <Route path="/notifications" exact element={<Notifications />} />
         <Route path="/*" exact element={<NotFoundPage />} />
       </Routes>
       {/* <Footer /> */}

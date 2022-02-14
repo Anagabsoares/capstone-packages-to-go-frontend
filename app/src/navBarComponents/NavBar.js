@@ -1,7 +1,8 @@
 import React from "react";
 import { Navbar, Container } from "react-bootstrap";
-import AuthenticationButton from "./AuthenticationButton";
+import LoginButton from "./LoginButton";
 import AdminNav from "./AdminNav";
+import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
 const NavBox = styled(Container)`
@@ -15,14 +16,14 @@ const NavBox = styled(Container)`
 
 const NavBarDark = styled(Navbar)``;
 
-const NavBar = ({ socket, currentUser }) => {
-  console.log(currentUser);
+const NavBar = () => {
+  const { isAuthenticated } = useAuth0();
   return (
-    <NavBarDark variant="light" socket={socket} currentUser={currentUser}>
-      <NavBox socket={socket} currentUser={currentUser}>
-        <AdminNav socket={socket} currentUser={currentUser} />
+    <NavBarDark variant="light">
+      <NavBox>
+        <AdminNav />
       </NavBox>
-      <AuthenticationButton socket={socket} currentUser={currentUser} />
+      {!isAuthenticated ? <LoginButton /> : <></>}
     </NavBarDark>
   );
 };

@@ -52,7 +52,6 @@ const Profile = () => {
                     <div>
                       <Image src={user.picture} alt={user.name} />
                     </div>
-                    <hr></hr>
                   </Card>
                 </Card.Header>
                 <Card.Body>

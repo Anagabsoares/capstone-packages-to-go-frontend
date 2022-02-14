@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Nav, Navbar, Badge } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import * as FaIcons from "react-icons/fa";
@@ -35,9 +36,9 @@ const NavBrand = styled(Navbar.Brand)`
 const AdminNav = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [role, setRole] = useState("");
-
-  const [userLogged, setUserLogged] = useState("");
-  const [counter, setCounter] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [counter, setCounter] = useState([]);
+  const serverUrl = "https://capstone-backend-api.herokuapp.com";
 
   useEffect(() => {
     const check_role = async () => {
@@ -45,7 +46,6 @@ const AdminNav = () => {
         try {
           let value = await user["https://netlify-integration.com/roles"];
           setRole(value);
-          setUserLogged(user.email);
         } catch (e) {
           console.error(e);
         }
@@ -53,6 +53,50 @@ const AdminNav = () => {
     };
     check_role();
   }, [user, isAuthenticated]);
+
+  useEffect(() => {
+    if (user) {
+      const getUser = async () => {
+        try {
+          const token = await getAccessTokenSilently();
+          const response = await axios.get(`${serverUrl}/users`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const users = response.data;
+          console.log();
+          const res = users.filter((us) => us.email === user.email);
+          setCurrentUser(res[0]);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUser();
+    }
+  }, [user, getAccessTokenSilently]);
+
+  useEffect(() => {
+    if (currentUser) {
+      const getNotifications = async (user_id) => {
+        try {
+          const token = await getAccessTokenSilently();
+          const response = await axios.get(
+            `${serverUrl}/users/${user_id}/notifications-not-read`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setCounter(response.data.length);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getNotifications(currentUser.user_id);
+    }
+  }, [currentUser, getAccessTokenSilently]);
 
   if (isAuthenticated && role[0] === "admin") {
     return (
@@ -69,7 +113,7 @@ const AdminNav = () => {
             <MdIcons.MdOutlineEmail size={25} />
             <Counter className="counter">
               <Badge pill bg="danger">
-                2
+                {counter}
               </Badge>
             </Counter>
           </Nav.Link>
@@ -78,7 +122,7 @@ const AdminNav = () => {
             <BellIcon size={25} />
             <Counter className="counter">
               <Badge pill bg="danger">
-                2
+                {counter}
               </Badge>
             </Counter>
           </Nav.Link>
@@ -94,13 +138,16 @@ const AdminNav = () => {
           <Nav.Link href="/profile">
             <CgIcons.CgProfile size={25} />
           </Nav.Link>
-
-          <Nav.Link href="/packages">
+          <Nav.Link href="/notifications">
             <BellIcon size={25} />
             <Counter className="counter">
-              <BadgeCounter pill bg="danger">
-                2
-              </BadgeCounter>
+              {counter !== 0 ? (
+                <BadgeCounter pill bg="danger">
+                  {counter}
+                </BadgeCounter>
+              ) : (
+                <></>
+              )}
             </Counter>
           </Nav.Link>
         </Nav>

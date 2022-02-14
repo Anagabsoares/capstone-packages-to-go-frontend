@@ -38,7 +38,7 @@ const Chart = () => {
         let delivered = 0;
         let requested = 0;
         // add time limit
-        const counter = response.data.forEach((item) => {
+        response.data.forEach((item) => {
           if (item.delivery_date !== "pending") {
             delivered += 1;
           } else if (item.status && item.delivery_date === "pending") {
@@ -58,7 +58,7 @@ const Chart = () => {
       }
     };
     getAllPackages();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   return (
     <ChartContainer>

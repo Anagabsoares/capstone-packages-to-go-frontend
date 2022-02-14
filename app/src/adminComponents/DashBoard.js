@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Chart from "./Chart";
 import * as FiIcons from "react-icons/fi";
 import * as AiIcons from "react-icons/ai";
@@ -30,10 +30,7 @@ const Column = styled(Col)`
   margin-top: -7%;
 `;
 
-const Dashboard = ({ socket, currentUser }) => {
-  console.log(currentUser);
-  const [buttonValue, setButtonValue] = useState();
-
+const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleClick = (event) => {
@@ -181,10 +178,7 @@ const Dashboard = ({ socket, currentUser }) => {
                 </Card.Title>
               </Card.Header>
               <Card.Body>
-                <CreatePackage
-                  currentUser={currentUser}
-                  socket={socket}
-                ></CreatePackage>
+                <CreatePackage></CreatePackage>
               </Card.Body>
               <Card.Text></Card.Text>
             </DashCard>
