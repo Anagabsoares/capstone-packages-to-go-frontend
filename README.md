@@ -9,17 +9,18 @@
 ## Dependencies
 
 - React 
-    react-dom
-    react-icons
-    react-router-dom
-    react-scripts
-    react-transition-group,
-    reactstrap
-    recharts
-    react-router-dom
-    react-bootstrap-table2-toolkit
-    react-bootstrap
+     - react-dom
+     - react-icons
+     - react-router-dom
+     - react-scripts
+     - react-transition-group,
+     - reactstrap
+     - recharts
+     - react-router-dom
+     - react-bootstrap-table2-toolkit
+     - react-bootstrap
 - @auth0/auth0-react
+- axios 
 
 
 ## Enviroment Set-up
