@@ -30,8 +30,6 @@
 
 - Clone the forked repo. Do not clone this inside of another project folder, because that will cause issues.
 
-### Scaffold the App
-
 - Create a new React app within this project folder. You must perform this within this front-end project folder.
 
         $ npx create-react-app .
@@ -45,6 +43,7 @@
    The front-end layer needs to send API requests to the back-end layer. In order to handle this, the front-end layer repo must include a .env file with this line:
 
         REACT_APP_BACKEND_URL=http://BACKEND-URL
+        optional backend: https://github.com/Anagabsoares/capstone-packages-to-go-backend
 
     Note that this REACT_APP_BACKEND_URL must include http://.
 
