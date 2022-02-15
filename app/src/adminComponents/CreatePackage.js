@@ -183,7 +183,7 @@ const CreatePackage = () => {
     }, 3000);
   };
 
-  const providerOptions = ["FEDEX", "AMAZON", "USP", "UPS", "OTHER"];
+  const providerOptions = ["FEDEX", "AMAZON", "USP", "USPS", "OTHER"];
   const descriptionOptions = [
     "REGULAR",
     "PERISHABLE",
@@ -196,7 +196,7 @@ const CreatePackage = () => {
         onSubmit={(e) => onSubmit(e, "added a new package")}
       >
         <label htmlFor="exampleDataList" className="form-label">
-          Resident's Name or unit
+          Enter Name or Unit
         </label>
         <input
           className="form-control"
