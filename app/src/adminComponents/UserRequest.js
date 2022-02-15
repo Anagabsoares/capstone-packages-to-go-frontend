@@ -36,13 +36,14 @@ const UserRequest = () => {
             res.push(item.user_id);
           }
         });
+
         setPackages(res);
       } catch (error) {
         console.log(error);
       }
     };
     getAllPackages();
-  }, []);
+  }, [getAccessTokenSilently, serverUrl]);
 
   const userFrequency = (arr) => {
     const map = {};
@@ -56,30 +57,27 @@ const UserRequest = () => {
     setFrequency(map);
   };
 
-  const getSpecResident = async (id) => {
-    try {
-      const token = await getAccessTokenSilently();
-      const res = await axios.get(`${serverUrl}/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setResidents([res.data]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getSpecResident = async (id) => {
+      try {
+        const token = await getAccessTokenSilently();
+        const res = await axios.get(`${serverUrl}/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setResidents([res.data]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     let residentList = new Set(packages);
     let users = Array.from(residentList);
     users.forEach((id) => {
       getSpecResident(id);
     });
     userFrequency(packages);
-  }, []);
-
-  const COLORS = ["primary", "success", "danger", "alert", "info"];
+  }, [packages, getAccessTokenSilently, serverUrl]);
 
   return (
     <Cont>
@@ -87,15 +85,15 @@ const UserRequest = () => {
       {residents ? (
         residents.map((item, index) => {
           return (
-            <RequestAlert key={index} variant={COLORS[index % COLORS.length]}>
+            <RequestAlert key={index} variant={"info"}>
               <Alert.Heading>
                 {item.name} has requested package delivery
               </Alert.Heading>
               <hr />
-              <p>TOTAL OF: {frequency[item.user_id]} packages </p>
-              <p>UNIT: {item.unit}</p>
-              <p>EMAIL: {item.email}</p>
-              <p>PHONE NUMBER: {item.phone_number}</p>
+              <li>TOTAL OF: {frequency[item.user_id]} packages </li>
+              <li>UNIT: {item.unit}</li>
+              <li>EMAIL: {item.email}</li>
+              <li>PHONE NUMBER: {item.phone_number}</li>
             </RequestAlert>
           );
         })
